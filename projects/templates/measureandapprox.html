@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody%}
+
+{% if formset %}
+	{% if formset.errors%} {{formset.errors}} {% endif %}
+	<form method="post" action="{% url 'measureandapprox' %}" name="FormSetForm" class="horizontalForm MeasurementFormSet">
+	{{ formset.management_form }}
+	    {% csrf_token %}
+	<div id="form_set">
+	{% for form in formset %}
+		<div class="MeasurementForm">
+		{{ form }}
+		<span style="margin-left:30px; display:none" class="hwl"> H X W X L :<span class="each_total"></span></span>
+		<br>
+		</div>
+	{% endfor %}
+	</div>
+	<input type="button" value="Add More" id="add_more_measurement" style="margin-left:20px">
+	<p>&nbsp;</p>
+	<p style="display:none; margin-left:20px;">Total Measurement is <span style="color:red;font-size: 25px;" id="total_measurement"></span></p>
+	<div class="rateperunit" style="margin-left: 10px; display:none">
+	<label for="id_unitcost">Cost:</label>
+	<input id="unitcost" name="unitcost" type="number">
+	<label for="id_cunit">per:</label>
+	<select id="cunit" name="cunit">
+	<option value="1">Feet</option>
+	<option value="2">Inches</option>
+	</select>
+	</div>
+	
+	</form>
+	<div style="display:none;height: 40px;margin-left: 30px; text-align: center; color: white; background-color: black;font-size: 45px;">Total Cost is <span style="color:red;" id="total_cost"></span></div>
+	<div id="empty_form" style="display:none">
+    <div class="MeasurementForm">
+		{{ formset.empty_form }}
+		<span style="margin-left:30px; display:none" class="hwl"> H X W X L :<span class="each_total"></span></span>
+		<br>
+		</div>
+	</div>
+{% endif %}
+{% endblock %}

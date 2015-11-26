@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody %}
+	<form method="post" action="{% url 'con_payment' %}" name="inputform" class="uniForm">
+	 {% csrf_token %}
+		<table>
+		{{ form.as_table }}
+		</table>
+		<input type="submit" name="inpbutton" value="Go" />
+	</form>
+{% endblock %}

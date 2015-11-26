@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{%block pagebody%}
+{% if success %}
+	<p class="success_message">
+		Successfully updated the project!
+	</p>
+{% endif %}
+<form method="post" class="uniForm">
+	{% csrf_token %}
+    {{ form |crispy }}
+	<input type="submit" name="submit" value="Update" />
+</form>
+{% endblock %}

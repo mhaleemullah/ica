@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody%}
+{% if success %}
+	<p class="success_message">
+		Attendance have been successfully saved for the date {{date}}
+	</p>
+{% endif %}
+<form method="post" action="{% url 'approximation' %}" name="knownform" style="background-color:darkseagreen">
+ {% csrf_token %}
+    {{ knownform }}
+    <input type="submit" name="knownbutton" value="Calculate" />
+</form>
+<p>&nbsp;</p>
+{% if cost %}
+<p>Total Cost will be {{cost}}</p>
+{% endif %}
+{% endblock %}

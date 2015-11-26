@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody %}
+	<form method="post" action="{% url 'pay_slip' %}" name="inputform">
+	 {% csrf_token %}
+		{{ payslipform }}
+		<input type="submit" name="inpbutton" value="Go" />
+	</form>
+{% if success == "1"%}
+	<div class="pform">
+	{% if attendance %}
+	
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<div class="employee_details">
+	<p style="text-align: center;">
+			<strong><span style="font-size:36px;">Omar And Associates</span></strong></p>
+			<p>&nbsp;</p>
+		<table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 500px">
+			<tbody>
+				<tr>
+					<th scope="row" >Employee Name</th>
+					<td style="text-align: center;">{{emp.name}}</td>
+				</tr>
+				<tr>
+					<th scope="row" >Salary Per Shift</th>
+					<td style="text-align: center;">{{emp.salary}}</td>
+				</tr>
+				<tr>
+					<th scope="row" >Total Shifts Worked</th>
+					<td style="text-align: center;">{{totshift}}</td>
+				</tr>
+                <tr>
+					<th scope="row" >Food Allowance</th>
+					<td style="text-align: center;">{{food_allowance}}</td>
+				</tr>
+				<tr>
+					<th scope="row" >Total Salary</th>
+					<td style="text-align: center;">{{salary}}</td>
+				</tr>
+                {% if carried_in != 0 %}
+				<tr style="background-color: crimson;color: white;">
+					<th scope="row" >Carried in from Previous Month </th>
+					<td style="text-align: center;">{{carried_in}}</td>
+				</tr>
+				{% endif %}
+                {% if carried_out != 0 %}
+				<tr style="background-color: greenyellow;color: white;">
+					<th scope="row" >Carried out to Next Amount </th>
+					<td style="text-align: center;">{{carried_out}}</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<th scope="row" >Advance Paid</th>
+					<td style="text-align: center;">{{tot}}</td>
+				</tr>
+				<tr>
+					<th scope="row" >To be paid as Salary </th>
+					<td style="text-align: center;">{{balance}}</td>
+				</tr>
+				{% if paidsalary %}
+				<tr>
+					<th scope="row" >Salary Paid </th>
+					<td style="text-align: center;">{{paidsalary}}</td>
+				</tr>
+				{% endif %}
+
+				{% if rem > 0 %}
+				<tr style="background-color: red;color: white;">
+					<th scope="row" >Amount to be settled </th>
+					<td style="text-align: center;">{{rem}}</td>
+				</tr>
+				{% endif %}
+			</tbody>
+		</table>
+		{% if rem == 0%}
+				<p>&nbsp;</p>
+				<p style='color:green; font-size:18px; text-align:center;'> Salary has been settled for this month.</p>
+		{% else %}
+            <p>&nbsp;</p>
+            {% comment %}<p style='color:red; font-size:18px; text-align:center;'> Salary has been overpaid for this month.</p>{% endcomment %}
+            <form method="post" action="{% url 'pay_slip' %}" name="inputform">
+                {% csrf_token %}
+                <input type="submit" name="transferbutton" value="Carry Forward" style="margin-left: 815px;" />
+                <input name="remain" type="hidden" value={{ rem }}>
+                <div style="display:none;">{{ payslipform }}</div>
+            </form>
+
+		{% endif %}
+		<p>&nbsp;</p>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<div class="accordion">
+				<h3><a href="#">Work Shifts Details</a></h3>
+				<div>
+					<table align="left" border="1" cellpadding="1" cellspacing="1" style="width: 500px; display: inline-block" class='alternate_rows detail_table'>
+					<thead>
+						<tr>
+							<th scope="col">
+								Date</th>
+							<th scope="col">
+								Shift</th>
+							<th scope="col">
+								Project</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for att in attendance%}
+						<tr>
+							<td>
+								{{att.date}}</td>
+							<td>
+								{{att.no_of_shifts}}</td>
+							<td>
+								{{att.project}}</td>
+						</tr>
+					{% endfor%}
+					</tbody>
+				</table>
+				</div>
+			</div>
+			{% if advances %}
+			<div class="accordion">
+				<h3><a href="#">Advances Details</a></h3>
+				<div>
+					<table align="left" border="1" cellpadding="1" cellspacing="1" style="width: 500px; float:left;" class='alternate_rows detail_table'>
+					<thead>
+						<tr>
+							<th scope="col">
+								Paid Date</th>
+							<th scope="col">
+								Amount</th>
+							<th scope="col">
+								Remarks</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for advance in advances%}
+						<tr>
+							<td>
+								{{advance.paid_date}}</td>
+							<td>
+								{{advance.amount}}</td>
+							<td>
+								{{advance.remarks}}</td>
+						</tr>
+					{% endfor%}
+					</tbody>
+				</table>
+				</div>
+			 </div>
+			{% endif %}
+		</div>
+	{%else%}
+	<p>&nbsp;</p>
+	<p style="color:red; text-align:center; font-size:22px">There are no salary details for the above selected criteria.</p>
+	{%endif%}
+	</div>
+{%endif%}
+{% endblock %}

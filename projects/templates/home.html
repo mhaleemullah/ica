@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block pagetitle%}
+	Interior Cost Analyzer
+{% endblock %}
+{% block pageheader%}
+    <h1 style="color:red;">
+	Defaulter's List
+    </h1>
+{% endblock %}
+{%block pagebody%}
+    {% render_table table %}
+{% endblock %}

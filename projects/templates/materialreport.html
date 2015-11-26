@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody %}
+	<form method="post" action="{% url 'material_cost' %}" name="inputform">
+	 {% csrf_token %}
+		{{ selprojform }}
+		<input type="submit" name="inpbutton" value="Go" />
+	</form>
+
+	<div class="pform">
+	{% if result_cat %}
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p style="text-align: center;">
+			<strong><span style="font-size:36px;">Omar And Associates</span></strong></p>
+	<p>&nbsp;</p>
+		<table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 500px" class="main_table">
+			<thead>
+				<tr>
+					<th scope="row" >Category</th>
+					<th style="text-align: center;">Amount</th>
+					<th style="text-align: center;">Balance </th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for cat in result_cat%}
+				<tr>
+					<th scope="row" >{{cat.name}}</th>
+					<td style="text-align: center;">{{cat.amount}}</td>
+					<td style="text-align: center;">{{cat.balance}}</td>
+				</tr>
+			{% endfor %}
+				<tr style="color:white;background-color:black">
+					<th scope="row" >Total Amount</th>
+					<td style="text-align: center;">{{total_amount}}</td>
+					<td style="text-align: center;">{{total_balance}}</td>
+				</tr>
+			</tbody>
+		</table>
+	<div data-role="main" class="ui-content">
+	{% for cat in result_cat%}
+		{% if cat.materials %}
+					<div class="accordion">
+						<h3><a href="#">{{cat.name}}</a></h3>
+						<div>
+							<table align="left" border="1" cellpadding="1" cellspacing="1" style="width: 500px; display: inline-block" class='alternate_rows detail_table'>
+							<thead>
+								<tr>
+									<th scope="col">
+										Invoice No</th>
+									<th scope="col">
+										Date</th>
+									<th scope="col">
+										Particulars</th>
+									<th scope="col">
+										Amount</th>
+									<th scope="col">
+										Balance</th>
+									<th scope="col">
+										Dealer</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for mat in cat.materials%}
+								<tr>
+									<td>
+										{{mat.invoice_no}}</td>
+									<td>
+										{{mat.date}}</td>
+									<td>
+										{{mat.particulars}}</td>
+									<td>
+										{{mat.amount}}</td>
+									<td>
+										{{mat.balance}}</td>
+									<td>
+										{{mat.dealer_id}}</td>
+								</tr>
+							{% endfor%}
+							</tbody>
+						</table>
+						</div>
+					</div>
+					
+				
+		{%endif%}
+	{% endfor %}
+	</div>
+	
+		{%else%}
+			{% if first_time != 1%}
+			<p>&nbsp;</p>
+			<p style="color:red; text-align:center; font-size:22px">There are no labor details for this project</p>
+			{% endif%}
+	{%endif%}
+	
+	</div>
+
+{% endblock %}

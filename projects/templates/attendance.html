@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody%}
+{% if success %}
+	<p class="success_message">
+		Attendance have been successfully saved for the date {{date}}
+	</p>
+{% endif %}
+<form method="post" action="{% url 'attendance' %}" name="dateform">
+ {% csrf_token %}
+    {{ dateform }}
+    <input type="submit" name="datebutton" value="Go" />
+</form>
+{% if formset %}
+	{% if formset.errors%} {{formset.errors}} {% endif %}
+	<form method="post" action="{% url 'attendance' %}" name="attendanceform" class="horizontalForm">
+	{{ formset.management_form }}
+	<input type="hidden" name="date" value={{date|date:"Y-m-d"}} />
+	<input type="hidden" name="employee" value={{form.employee}} />
+	    {% csrf_token %}
+	{% for form in formset %}
+		{{ form.as_table }}
+		<br>
+	{% endfor %}
+	<input type="submit" name="submit" value="Submit" />
+	</form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% block pagetitle%}
+	Interior Cost Analyzer
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{%block pagebody%}
+{% if success == "1" %}
+	<p class="success_message">
+		Successfully updated the {{title}}!
+	</p>
+{% endif %}
+	{% render_table table %}
+{% endblock %}

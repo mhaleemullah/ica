@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	Interior Cost Analyzer
+{% endblock %}
+{% block pageheader%}
+	Make Payment - {{ proj.name }}
+{% endblock %}
+{%block pagebody%}
+{% if success = '1'%}
+	<p class="success_message">
+		Last Payment applied successfully!. Make another payment.
+	</p>
+{% endif %}
+ 
+
+
+<form method="post" class="uniForm paymentForm" onsubmit="return validPayment()">
+  {% csrf_token %} 
+    <table>
+        {{ form.as_table }}
+    </table>
+	<div class="SumoSelect" tabindex="0">
+<p class="warning nodisplay">When Remaining amount goes below 0, payments will be applied to invoices with lowest balance to highest and the last invoice will be partially applied  </p>
+  <h1>Select the Invoices of the payment</h1>        
+        <select multiple="multiple" name="invoices" placeholder="Hello  im from placeholder" class="SlectBox" >
+       {% for inv in invoices %}
+	   <option value="{{inv.id}}" id = "{{inv.id}}"class='disabled' data-balance="{{inv.balance}}">{{inv}}</option>
+	   {% endfor %}
+    </select>
+	</div>
+	<br>
+	<p>&nbsp;</p>
+	<input type="submit" name="Submit" value="Make Payment" />
+</form>
+{% endblock %}

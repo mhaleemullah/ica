@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+{% block pagetitle%}
+	{{title}}
+{% endblock %}
+{% block pageheader%}
+	{{title}}
+{% endblock %}
+{% block pagebody %}
+	<form method="post" action="{% url 'dealer_outstanding' %}" name="inputform">
+	 {% csrf_token %}
+		{{ select_dealer_form }}
+		<input type="submit" name="inpbutton" value="Go" />
+	</form>
+
+	<div class="pform">
+    {% if first_time == 1%}
+        <div style="margin: 50px;">
+            {% render_table table %}
+        </div>
+        <p style="margin-left: 505px;font-size: 18px;"> Total Outstanding : {{ total }}</p>
+    {% endif %}
+	{% if result_proj %}
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p style="text-align: center;">
+			<strong><span style="font-size:36px;">Omar And Associates</span></strong></p>
+	<p>&nbsp;</p>
+		<table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 500px" class="main_table">
+			<thead>
+				<tr>
+					<th scope="row" >Project</th>
+					<th style="text-align: center;">Billed Amount</th>
+					<th style="text-align: center;">Balance Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for proj in result_proj%}
+				<tr>
+					<th scope="row" >{{proj.name}}</th>
+					<td style="text-align: center;">{{proj.amount}}</td>
+					<td style="text-align: center;">{{proj.balance}}</td>
+				</tr>
+			{% endfor %}
+				<tr style="color:white;background-color:black">
+					<th scope="row" >Total </th>
+					<td style="text-align: center;">{{total_amount}}</td>
+					<td style="text-align: center;">{{total_balance}}</td>
+				</tr>
+			</tbody>
+		</table>
+	<div data-role="main" class="ui-content">
+	{% for proj in result_proj%}
+		{% if proj.invoices %}
+					<div class="accordion">
+						<h3><a href="#">{{proj.name}}</a></h3>
+						<div>
+							<table align="left" border="1" cellpadding="1" cellspacing="1" style="width: 500px; display: inline-block" class='alternate_rows detail_table'>
+							<thead>
+								<tr>
+									<th scope="col">
+										Invoice No</th>
+									<th scope="col">
+										Date</th>
+									<th scope="col">
+										Particulars</th>
+									<th scope="col">
+										Amount</th>
+									<th scope="col">
+										Balance</th>
+									<th scope="col">
+										Remarks</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for inv in proj.invoices%}
+								<tr>
+									<td>
+										{{inv.invoice_no}}</td>
+									<td>
+										{{inv.date}}</td>
+									<td>
+										{{inv.particulars}}</td>
+									<td>
+										{{inv.amount}}</td>
+									<td>
+										{{inv.balance}}</td>
+									<td>
+										{{inv.remarks}}</td>
+								</tr>
+							{% endfor%}
+							</tbody>
+						</table>
+						
+						</div>
+					</div>
+					
+				
+		{%endif%}
+	{% endfor %}
+	</div>
+	
+		{%else%}
+			{% if first_time != 1%}
+			<p>&nbsp;</p>
+			<p style="color:red; text-align:center; font-size:22px">There are no outstandings for this dealer</p>
+			{% endif%}
+	{%endif%}
+	
+	</div>
+ -->
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block pagetitle%}
+	Interior Cost Analyzer
+{% endblock %}
+{% block pageheader%}
+	Material Purchase - {{ proj.name }}
+{% endblock %}
+{%block pagebody%}
+{% if success = '1'%}
+	<p class="success_message">
+		Last Purchase saved successfully!. Add another Purchase
+	</p>
+{% endif %}
+<form method="post" class="uniForm">
+    {% crispy form %}
+	{{form.media}}
+</form>
+{% endblock %}
